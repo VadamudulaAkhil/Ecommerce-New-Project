@@ -1,0 +1,28 @@
+{% extends 'store/Main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if Searched %}
+        <h1 class="text-center">Searched for "{{ Searched }}"</h1>
+        <div class="row mt-4">
+            {% for SP in S_Products %}
+            <div class="col-md-4 mb-4 text-center">
+                <div class="card">
+                    <img src="{{ SP.imageURL }}" class="card-img-top " style="size-adjust: 10px;" alt="{{SP.name}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ SP.name }}</h5>
+                        <p class="card-text"><strong>${{ SP.price|floatformat:2 }}</strong></p>
+                        <button data-product="{{SP.id}}" data-action="add" class="btn btn-outline-secondary add-btn update_cart">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">You forgot to search....</p>
+    {% endif %}
+</div>
+{% endblock content %}

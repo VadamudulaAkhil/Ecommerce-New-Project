@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript</title>
+    <style>
+        span
+        {
+            background-color: rgb(218, 94, 32);
+            color: white;
+            font-family: monospace;
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background-color: aquamarine; padding-top: 70px;">
+    
+        <center>
+            <form action="" method="post" onsubmit="return Test()">
+                {% csrf_token %}
+                <h1>Registration Form</h1>
+                <br>
+                <table border="3" style="padding: 100px; background: rgb(169, 236, 237);">
+                    <div>
+                    <tr>
+                        <td><label for=""><sup style="color: red;">* </sup>Firstname</label></td>
+                        <td><input type="text" name="firstname" placeholder="Firstname" id="A" autocomplete="off"></td>
+                        <td><span id="a"></span></td>
+                    </tr>
+                    <tr>
+                        <td><sup style="color: white;">&nbsp;</sup><label for="">  Middlename</label></td>
+                        <td><input type="text" name="middlename" placeholder="Middlename" id="A1" autocomplete="off"></td>
+                        <td><span id="a1"></span></td>
+                    </tr>
+                    <tr>
+                        <td><label for=""><sup style="color: red;">* </sup>Lastname</label></td>
+                        <td><input type="text" name="lastname" placeholder="Lastname" id="B" autocomplete="off"></td>
+                        <td><span id="b"></span></td>
+                    </tr>
+                    <tr>
+                        <td><sup style="color: red;">* </sup><label for="">Username</label></td>
+                        <td><input type="text" name="username" placeholder="Username" id="C" autocomplete="off"></td>
+                        <td><span id="c"></span></td>
+                    </tr>                    
+                    <tr>
+                        <td><sup style="color: red;">* </sup><label for="">Password</label></td>
+                        <td><input type="password" name="password" placeholder="Password" id="D" autocomplete="off"></td>
+                        <td><span id="d"></span></td>
+                    </tr>                    
+                    <tr>
+                        <td><sup style="color: red;">* </sup><label for="">Confirm_Password</label></td>
+                        <td><input type="password" name="confirm_password" placeholder="Password" id="E" autocomplete="off"></td>
+                        <td><span id="e"></span></td>
+                    </tr>                    
+                    <tr>
+                        <td><sup style="color: red;">* </sup><label for="">Email</label></td>
+                        <td><input type="text" name="email" placeholder="Email" id="F" autocomplete="off"></td>
+                        <td><span id="f"></span></td>
+                    </tr>                  
+                    <tr>
+                        <td><sup style="color: red;">* </sup><label for="">Mobile_Number</label></td>
+                        <td><input type="text" name="mobile_number" placeholder="Mobile_Number" id="G" autocomplete="off"></td>
+                        <td><span id="g"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <input type="submit" value="Login" style="width: 100%; display: block; font-size: 1.2rem; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px;">
+                        </td>
+                    </tr>
+                    
+                      
+                    </div>
+                </table>
+            </form>
+        </center>
+    
+    <script>
+        function Test()
+        {
+            var firstname=document.getElementById("A").value
+            var Middlename=document.getElementById("A1").value
+            var lastname=document.getElementById("B").value
+            var username=document.getElementById("C").value
+            var password=document.getElementById("D").value
+            var confirm_Password=document.getElementById("E").value
+            var email=document.getElementById("F").value
+            var mobile_Number=document.getElementById("G").value
+            var Result1=firstname.match(/^[A-Z/s]+$/g)
+            var Result01=Middlename.match(/^[A-Z/s]+$/g)
+            var Result2=lastname.match(/^[A-Z/s]+$/g)
+            var Result3=username.match(/[A-Z]{1}[A-Za-z0-9]*/g)
+            var Result4=password.match(/[A-Z]{1}[A-Za-z0-9]{5}/g)
+            var Result5=confirm_Password.match(/[A-Z]{1}[A-Za-z0-9]{5}/g)
+            var Result6=email.match(/\w[A-Za-z0-9._]*@gmail[.]com/g)
+            var Result7=mobile_Number.match(/[+]{1}[9]{1}[1]{1}[ ]{1}[6-9]{1}[0-9]{9}/g)
+
+            if (firstname==""||firstname==null)
+        {
+            alert("Firstname is Required..")
+            document.getElementById("a").innerHTML="*** Firstname is Required in UpperCase ***"
+            return false
+        }
+        else if (Result1=="" || Result1==null)
+        {
+            window.alert("Invalid Firstname...")
+            document.getElementById("a").innerHTML=firstname+" : Invalid Firstname Ex: AKHIL"
+            return false
+        }
+        if(lastname=="" || lastname==null)
+        {
+            window.alert("lastname is Required...")
+            document.getElementById("b").innerHTML="*** Last_Name is Required in Uppercase ***"
+            return false
+        }
+        else if (Result2=="" || Result2==null)
+        {
+            window.alert("Invalid Lastname...")
+            document.getElementById("b").innerHTML=lastname+" : Invalid Lastname Ex:AKHIL"
+            return false
+        }
+        if(username=="" || username==null)
+        {
+            window.alert("username is Required...")
+            document.getElementById("c").innerHTML="*** User_Name is Required ***"
+            return false
+        }
+        else if (Result3=="" || Result3==null)
+        {
+            window.alert("Invalid Username...")
+            document.getElementById("c").innerHTML=username+" : Invalid Username Ex:Akhil456"
+            return false
+        }
+        if(password=="" || password==null)
+        {
+            window.alert("Password is Required...")
+            document.getElementById("d").innerHTML="*** Password is Required ***"
+            return false
+        }
+        else if (Result4=="" || Result4==null)
+        {
+            window.alert("Invalid Password...")
+            document.getElementById("d").innerHTML=password+" : Invalid Password Ex: A12345"
+            return false
+        }
+        if(confirm_Password=="" || confirm_Password==null)
+        {
+            window.alert("Confirm_Password is Required...")
+            document.getElementById("e").innerHTML="*** Confirm_Password is Required ***"
+            return false
+        }
+        else if (Result5=="" || Result5==null)
+        {
+            window.alert("Invalid Confirm_Password...")
+            document.getElementById("e").innerHTML=confirm_Password+" : Invalid Confirm_Password Ex: A12345"
+            return false
+        }
+        if(email=="" || email==null)
+        {
+            window.alert("Email is Required...")
+            document.getElementById("f").innerHTML="*** Email is Required ***"
+            return false
+        }
+        else if (Result6=="" || Result6==null)
+        {
+            window.alert("Invalid Email...")
+            document.getElementById("f").innerHTML=email+" : Invalid Email Ex: akhil456t@gmail.com"
+            return false
+        }
+        if(mobile_Number=="" || mobile_Number==null)
+        {
+            window.alert("Mobile_Number is Required...")
+            document.getElementById("g").innerHTML="*** Mobile_Number is Required ***"
+            return false
+        }
+        else if (Result7=="" || Result7==null)
+        {
+            window.alert("Invalid Mobile_Number...")
+            document.getElementById("g").innerHTML=mobile_Number+" : Invalid Mobile_Number Ex: +91 8328330529"
+            return false
+        }
+        return true
+        }
+    </script>
+</body>
+</html>
+
+

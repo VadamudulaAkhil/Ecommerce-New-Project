@@ -1,0 +1,259 @@
+<!DOCTYPE html> 
+{% load static %}
+<html lang="en">
+  <head>
+ 
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Ecommerce</title>
+
+    <script>
+      var user = '{{ request.user }}'
+
+      function getToken(name) {
+        let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  var csrftoken = getToken('csrftoken');
+
+  function getCookie(name) {
+      // Split cookie string and get all individual name=value pairs in an array
+      var cookieArr = document.cookie.split(";");
+
+      // Loop through the array elements
+      for(var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
+
+          /* Removing whitespace at the beginning of the cookie name
+          and compare it with the given string */
+          if(name == cookiePair[0].trim()) {
+              // Decode the cookie value and return
+              return decodeURIComponent(cookiePair[1]);
+          }
+      }
+
+      // Return null if not found
+      return null;
+  }
+
+  var cart = JSON.parse(getCookie('cart'))
+  if(cart == undefined){
+    cart = {}
+    console.log('Cart was Created')
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+  }
+  console.log('cart:',cart)
+
+  function Confirm_Logout(){
+    const confirmed = window.confirm('Are you sure, You want to Logout? ')
+    if(confirmed){
+      fetch('/Logout/',{
+        method : 'POST',
+        headers : {
+          'X-CSRFToken' : getCookie('csrftoken')
+        }
+      }).then(response => {
+        if(response.redirected){
+          window.location.href = response.url;
+        }
+      })
+    }
+  }
+
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar.style.width === "250px") {
+    sidebar.style.width = "0";
+  } else {
+    sidebar.style.width = "250px";
+  }
+}
+
+function openFeedback() {
+        document.getElementById("feedbackPanel").style.width = "300px";
+    }
+
+    function closeFeedback() {
+        document.getElementById("feedbackPanel").style.width = "0";
+    }
+
+    </script>
+
+
+<style>
+  body {
+      font-family: Arial, sans-serif;
+  }
+
+  /* Feedback panel */
+  #feedbackPanel {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: #f1f1f1;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+  }
+
+  /* Content inside the panel */
+  #feedbackPanel form {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+  }
+
+  #feedbackPanel input,
+  #feedbackPanel textarea {
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+  }
+
+  /* Close button */
+  .closeBtn {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 36px;
+      cursor: pointer;
+  }
+</style>
+
+  </head>
+  <body>
+
+    <nav style="background-color: rgb(141, 219, 219)!important;" class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'store' %}">A2S Brands</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'store' %}">Items <span class="sr-only">(current)</span></a>
+            </li>
+            
+          </ul>
+          
+          <div style="float: right;" class="form-inline my-2 my-lg-0" class="form-control">
+            <form method="POST" action="{% url 'Search' %}">
+              {% csrf_token %}
+              <input class="form-control" 
+                     name="Searched" placeholder="Search" type="search">
+              <button type="submit" class="form-control glyphicon glyphicon-search"></button>
+          </form>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+
+          {% if user.is_authenticated %}
+
+          <!-- <button onclick="Confirm_Logout()" class="btn btn-danger">Logout</button> -->
+
+          <button class="rounded-circle" onclick="toggleSidebar()">👤</button>
+          <!-- Slide Panel -->
+          <div id="sidebar" class="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
+            <h3>User Details</h3>
+            <br>
+            <strong>User Name : {{user.username}}</strong>
+            <strong>Email : {{user.email}}</strong>
+
+            <!-- <p><a href="" class="btn btn-primary" style="position: fixed; bottom: 0%; margin-left: 100px;">FeedBack</a></p> -->
+            <button onclick="openFeedback()" class="btn btn-primary" style="margin-top: 300px; margin-left: 20px;">FeedBack</button>
+            <div id="feedbackPanel">
+              <span class="closeBtn" onclick="closeFeedback()">&times;</span>
+              <form>
+                  <h2>Feedback</h2>
+                  <input type="text" placeholder="Your Name" required>
+                  <textarea placeholder="Your Feedback" rows="5" required></textarea>
+                  <button type="submit">Submit</button>
+              </form>
+          </div>
+            <footer><button onclick="Confirm_Logout()" class="btn btn-danger">Logout</button></footer>
+          </div>
+        
+
+          {% else %}
+
+          <a href="{% url 'register' %}" class="btn btn-primary">Register</a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+          <a href="{% url 'Login' %}" class="btn btn-success">Login</a>
+
+          {% endif %}
+                 <!-- <a href="{% url 'register' %}" class="btn btn-primary">Register</a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                 <a href="{% url 'Login' %}" class="btn btn-success">Login</a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                 <a href="{% url 'Logout' %}" class="btn btn-danger">Logout</a> -->
+
+                    
+                  <a href="{% url 'Cart' %}">
+                    <img  id="cart-icon" src="{% static 'images/cart.png' %}">
+                   </a>
+                 <p id="cart-total">{{cartItems}}</p>
+           
+               </div>
+          
+          </div>
+      </nav>
+
+    <div class="container">
+        {% block content %}
+
+       
+
+        {% endblock content %}
+    </div>
+    
+  
+
+ 
+
+ <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/Cart.js' %}"></script>
+  </body>
+</html>
