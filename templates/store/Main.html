@@ -199,15 +199,15 @@ function openFeedback() {
             <strong>Email : {{user.email}}</strong>
 
             <!-- <p><a href="" class="btn btn-primary" style="position: fixed; bottom: 0%; margin-left: 100px;">FeedBack</a></p> -->
-            <button onclick="openFeedback()" class="btn btn-primary" style="margin-top: 300px; margin-left: 20px;">FeedBack</button>
+            <button onclick="openFeedback()" class="btn btn-primary" style="margin-top: 10px; margin-left: 20px;">FeedBack</button>
             <div id="feedbackPanel">
               <span class="closeBtn" onclick="closeFeedback()">&times;</span>
-              <form>
-                  <h2>Feedback</h2>
-                  <input type="text" placeholder="Your Name" required>
-                  <textarea placeholder="Your Feedback" rows="5" required></textarea>
-                  <button type="submit">Submit</button>
-              </form>
+              <form method="POST" action="{% url 'feedback' %}">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Your Name" required>
+                <textarea name="message" placeholder="Your Feedback" rows="5" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
           </div>
             <footer><button onclick="Confirm_Logout()" class="btn btn-danger">Logout</button></footer>
           </div>

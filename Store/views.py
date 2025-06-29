@@ -14,6 +14,9 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 # def UserDetails(request):
@@ -294,6 +297,22 @@ def PaymentCallback(request):
     else:
         return JsonResponse({'status' : 'Failed'})
     
-def Feedback(request):
+# def Feedback(request):
     
-    return render(request, 'store/FeedBack.html')
+#     return render(request, 'store/FeedBack.html')
+
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        message = request.POST.get('message')
+        subject = f"Feedback from {name}"
+        recipient = 'akhil456t@gmail.com'  # where you want to receive feedback
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient])
+        return redirect('success')
+    return render(request, 'feedback.html')
+
+def success(request):
+    return render(request, 'store/Success.html')

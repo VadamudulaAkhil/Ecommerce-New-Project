@@ -17,8 +17,11 @@ urlpatterns = [
     path('checkoutview/<int:product_id/', views.CheckoutView, name = 'checkoutview'),
     path('create-payment/<int:product_id/', views.CreatePaymentView, name = 'create-payment'),
     path('payment_verify', views.PaymentCallback, name='payment_verify'),
-    path('feedback/', views.Feedback, name='feedback')
-    
+    # path('feedback/', views.Feedback, name='feedback')
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('success/', views.success, name='success')
+
+
 ] 
 
  
