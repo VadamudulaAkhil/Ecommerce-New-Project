@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,9 +25,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR,'templates')
 SECRET_KEY = 'qq3zfmf=xpavaexqf^$z&q5-1g!_^tl!3a8^l7uec3k0i9+*#4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mydjangoapp.onrender.com', '127.0.0.1:8000', 'localhost']
 
 
 # Application definition
@@ -123,7 +124,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+MIDDLEWARE += ['whitenoise.middleware.WhiteNoiseMiddleware',]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
@@ -149,3 +153,11 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'akhil456t@gmail.com'
 EMAIL_HOST_PASSWORD = 'sqss glnl shiv rjqd'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+DATABASES['default'] = dj_database_url.config(
+    conn_max_age=600,
+    ssl_require=True
+)
+
