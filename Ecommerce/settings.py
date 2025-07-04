@@ -27,7 +27,7 @@ SECRET_KEY = 'qq3zfmf=xpavaexqf^$z&q5-1g!_^tl!3a8^l7uec3k0i9+*#4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['mydjangoapp.onrender.com', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['mydjangoapp.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -126,7 +126,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
 MIDDLEWARE += ['whitenoise.middleware.WhiteNoiseMiddleware',]
 
 STATICFILES_DIRS = [
@@ -156,8 +155,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 
-DATABASES['default'] = dj_database_url.config(
-    conn_max_age=600,
-    ssl_require=True
-)
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True
+    )
 
