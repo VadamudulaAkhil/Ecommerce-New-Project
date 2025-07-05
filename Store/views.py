@@ -67,7 +67,6 @@ def Register_Page(request):
             email=email,
             first_name=firstname,
             last_name=lastname,
-            mobile_number=mobile_number
         )
 
         # Create the UserProfile
