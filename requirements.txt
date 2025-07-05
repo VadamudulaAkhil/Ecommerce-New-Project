@@ -67,7 +67,7 @@ iniconfig==2.0.0
 PyMySQL==1.1.1
 numpy>=1.21,<1.26
 packaging==24.0
-pandas==1.1.5
+pandas==1.5.3
 Pillow==9.5.0
 pluggy==1.2.0
 protobuf==4.24.4
