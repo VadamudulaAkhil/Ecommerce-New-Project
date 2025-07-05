@@ -4,10 +4,15 @@
 
 <div class="contianer mx-auto p-6">
     <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h5>items : {{ order.get_cart }}</h5>
-        <h5>Total : ₹{{ order.get_cart_total|floatformat:2 }}</h5>
-        <a href="{% url 'Checkout' %}"><h5 style="float: right; margin-top: -40px; font-size: 20px;" class="btn btn-primary">Back</h5></a>
-    <button id="rzp-button1" class="btn btn-success mt-4 bg-green-500 text-white px-6 py-2 rounded-lg">Pay Now</button>
+        <br>
+        <h3 style="text-align: center;">items : {{ order.get_cart }}</h3>
+        <h3 style="text-align: center;">Total : ₹{{ order.get_cart_total|floatformat:2 }}</h3>
+        <br>
+        <a href="{% url 'Checkout' %}"><h5 style="float: right; margin-top:-130px; margin-right: 10px; font-size: 20px;" class="btn btn-primary">Back</h5></a>
+    <button id="rzp-button1" class="btn btn-success" style="margin-left: 50%;">Pay Now</button>
+    <br>
+    <br>
+    <br>
     </div>
 </div>
 
@@ -20,9 +25,10 @@
 
     var options = {
         "key": data.razorpay_key_id,
-        "amount": "50000",
+        "amount": data.amount,
         "currency": "INR",
         "name": "Ecommerce",
+        "order_id":data.order_id,
         "description": "Test transaction",
         "handler": function (response){
             alert(response.razorpay_payment_id);
