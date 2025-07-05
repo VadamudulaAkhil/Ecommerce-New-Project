@@ -79,33 +79,28 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 import dj_database_url
 
-# Get DATABASE_URL from environment (e.g., Render, Heroku)
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# If DATABASE_URL exists, use PostgreSQL config
 if DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(
-        DATABASE_URL,
-        conn_max_age=600,
-        ssl_require=True  # Only works for databases like PostgreSQL, not SQLite
-    )
+    if DATABASE_URL.startswith("postgres://") or DATABASE_URL.startswith("postgresql://"):
+        DATABASES = {
+            "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+        }
+    else:
+        DATABASES = {
+            "default": dj_database_url.parse(DATABASE_URL)
+        }
 else:
-    # Fall back to local SQLite (development)
+    # Fallback to SQLite for local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+
 
 
 # Password validation
