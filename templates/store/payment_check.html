@@ -18,17 +18,16 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    document.getElementById('rzp-button1').addEventListener('click' , async function() {
-        let response = await fetch(`/create-payment/{{ order.id }}/`, {method:'POST'})
-        let data = await response.json()
+    // document.getElementById('rzp-button1').addEventListener('click' , async function() {
+    //     let response = await fetch(`/create-payment/{{ order.id }}/`, {method:'POST'})
+    //     let data = await response.json()
 
 
     var options = {
-        "key": data.razorpay_key_id,
-        "amount": data.amount,
+        "key": "rzp_test_LYBUASWfyZDinq",
+        "amount": "560000",
         "currency": "INR",
         "name": "Ecommerce",
-        "order_id":data.order_id,
         "description": "Test transaction",
         "handler": function (response){
             alert(response.razorpay_payment_id);
@@ -48,7 +47,7 @@
         rzp.open();
         e.preventDefault();
     }
-})
+// })
 </script>
 
 
