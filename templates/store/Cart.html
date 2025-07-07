@@ -48,6 +48,22 @@
                     <div style="flex: 1;">₹{{ I.get_total }}</div>
                 </div>
                 {% endfor %}
+
+                {% for E in products %}
+                <div class="box-row">
+                    <div style="flex: 3;"><img class="box-img" src="{{ E.product.imageURL }}" alt="{{E.products.name}}"></div>
+                    <div style="flex: 2;">{{ E.product.name }}</div>
+                    <div style="flex: 2;">₹{{ E.product.price|floatformat:2 }}</div>
+                    <div style="flex: 1;">
+                        <p class="Quantity">{{ E.quantity }}</p>
+                        <div class="Quantity">
+                            <img data-product="{{E.product.id}}" data-action="add" class="Change_Q update_cart" src="{% static 'images/arrow-up.png' %}" alt="">
+                            <img data-product="{{E.product.id}}" data-action="remove" class="Change_Q update_cart" src="{% static 'images/arrow-down.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">₹{{ E.get_total }}</div>
+                </div>
+                {% endfor %} 
             </div>
         </div>
     </div>

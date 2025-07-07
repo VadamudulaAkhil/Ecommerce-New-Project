@@ -18,39 +18,56 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    // document.getElementById('rzp-button1').addEventListener('click' , async function() {
-    //     let response = await fetch(`/create-payment/{{ order.id }}/`, {method:'POST'})
-    //     let data = await response.json()
-
-
-    var options = {
-        "key": "rzp_test_LYBUASWfyZDinq",
-        "amount": "560000",
-        "currency": "INR",
-        "name": "Ecommerce",
-        "description": "Test transaction",
-        "handler": function (response){
-            alert(response.razorpay_payment_id);
-        },
-        "prefill": {
-            "name": "Test User",
-            "email": "test@example.com",
-            "contact": "9999999999"
-        },
-        "theme": {
-            "color": "#528FF0"
-        }
-    };
-
-    document.getElementById('rzp-button1').onclick = function(e){
+    document.getElementById('rzp-button1').addEventListener('click', async function(e) {
+        e.preventDefault();
+    
+        let response = await fetch(`/create-payment/{{ order.id }}/`, {method:'POST'});
+        let data = await response.json();
+    
+        var options = {
+            "key": data.razorpay_key_id,
+            "amount": data.amount,
+            "currency": "INR",
+            "name": "Ecommerce",
+            "description": "Test transaction",
+            "order_id": data.order_id,
+            "handler": function (response){
+                // Send payment response to your server
+                fetch("/payment_verify", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: `razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === "Success"){
+                        alert("Payment Successful!");
+                        window.location.href = "/";
+                    } else {
+                        alert("Payment Failed!");
+                    }
+                });
+            },
+            "prefill": {
+                "name": data.name,
+                "email": data.email,
+                "contact": data.mobile
+            },
+            "theme": {
+                "color": "#528FF0"
+            }
+        };
+    
         var rzp = new Razorpay(options);
         rzp.open();
-        e.preventDefault();
-    }
-// })
-</script>
+    });
+    </script>
+    
 
 
 
 
-{% endblock content %}
+{% endblock content %} 

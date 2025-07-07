@@ -14,12 +14,16 @@ urlpatterns = [
     path('Logout/', LogoutView.as_view(next_page = 'Login'), name = 'Logout'),
     # path('checkout/', views.checkout, name='checkout'),
     # path('payment-success/', views.payment_success, name='payment_success'),
-    path('checkoutview/<int:product_id/', views.CheckoutView, name = 'checkoutview'),
-    path('create-payment/<int:product_id/', views.CreatePaymentView, name = 'create-payment'),
+    path('checkoutview/<int:product_id>/', views.CheckoutView, name = 'checkoutview'),
+    path('create-payment/<int:order_id>/', views.CreatePaymentView, name = 'create-payment'),
     path('payment_verify', views.PaymentCallback, name='payment_verify'),
     # path('feedback/', views.Feedback, name='feedback')
     path('feedback/', views.feedback_view, name='feedback'),
-    path('success/', views.success, name='success')
+    path('success/', views.success, name='success'),
+    path('electronics/', views.electronic, name = 'electronics'),
+    path('mobiles/', views.mobiles, name='mobiles'),
+    path('appliances/', views.HomeAppliances, name='appliances'),
+    path('accessories/', views.accessories, name='accessories')
 
 
 ] 

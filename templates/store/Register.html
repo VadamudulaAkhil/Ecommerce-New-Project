@@ -92,11 +92,11 @@
             var Result1=firstname.match(/^[A-Z/s]+$/g)
             var Result01=Middlename.match(/^[A-Z/s]+$/g)
             var Result2=lastname.match(/^[A-Z/s]+$/g)
-            var Result3=username.match(/[A-Z]{1}[A-Za-z0-9]*/g)
-            var Result4=password.match(/[A-Z]{1}[A-Za-z0-9]{5}/g)
-            var Result5=confirm_Password.match(/[A-Z]{1}[A-Za-z0-9]{5}/g)
+            var Result3=username.match(/[A-Za-z0-9]*/g)
+            var Result4=password.match(/[A-Za-z0-9._]{8,}/g)
+            var Result5=confirm_Password.match(/[A-Za-z0-9._]{8,}/g)
             var Result6=email.match(/\w[A-Za-z0-9._]*@gmail[.]com/g)
-            var Result7=mobile_Number.match(/[+]{1}[9]{1}[1]{1}[ ]{1}[6-9]{1}[0-9]{9}/g)
+            var Result7=mobile_Number.match(/[6-9]{1}[0-9]{9}/g)
 
             if (firstname==""||firstname==null)
         {
@@ -107,7 +107,7 @@
         else if (Result1=="" || Result1==null)
         {
             window.alert("Invalid Firstname...")
-            document.getElementById("a").innerHTML=firstname+" : Invalid Firstname Ex: AKHIL"
+            document.getElementById("a").innerHTML=firstname+" : Only UpperCase letters"
             return false
         }
         if(lastname=="" || lastname==null)
@@ -119,7 +119,7 @@
         else if (Result2=="" || Result2==null)
         {
             window.alert("Invalid Lastname...")
-            document.getElementById("b").innerHTML=lastname+" : Invalid Lastname Ex:AKHIL"
+            document.getElementById("b").innerHTML=lastname+" : Only UpperCase letters"
             return false
         }
         if(username=="" || username==null)
@@ -131,7 +131,7 @@
         else if (Result3=="" || Result3==null)
         {
             window.alert("Invalid Username...")
-            document.getElementById("c").innerHTML=username+" : Invalid Username Ex:Akhil456"
+            document.getElementById("c").innerHTML=username+" : Invalid Username "
             return false
         }
         if(password=="" || password==null)
@@ -143,7 +143,7 @@
         else if (Result4=="" || Result4==null)
         {
             window.alert("Invalid Password...")
-            document.getElementById("d").innerHTML=password+" : Invalid Password Ex: A12345"
+            document.getElementById("d").innerHTML=password+" : Password should be 8 Charcters"
             return false
         }
         if(confirm_Password=="" || confirm_Password==null)
@@ -155,7 +155,7 @@
         else if (Result5=="" || Result5==null)
         {
             window.alert("Invalid Confirm_Password...")
-            document.getElementById("e").innerHTML=confirm_Password+" : Invalid Confirm_Password Ex: A12345"
+            document.getElementById("e").innerHTML=confirm_Password+" : Should match Password"
             return false
         }
         if(email=="" || email==null)
@@ -167,7 +167,7 @@
         else if (Result6=="" || Result6==null)
         {
             window.alert("Invalid Email...")
-            document.getElementById("f").innerHTML=email+" : Invalid Email Ex: akhil456t@gmail.com"
+            document.getElementById("f").innerHTML=email+" : Invalid Email "
             return false
         }
         if(mobile_Number=="" || mobile_Number==null)
@@ -179,7 +179,7 @@
         else if (Result7=="" || Result7==null)
         {
             window.alert("Invalid Mobile_Number...")
-            document.getElementById("g").innerHTML=mobile_Number+" : Invalid Mobile_Number Ex: +91 8328330529"
+            document.getElementById("g").innerHTML=mobile_Number+" : Invalid Mobile_Number"
             return false
         }
         return true

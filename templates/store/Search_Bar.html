@@ -12,7 +12,7 @@
                     <img src="{{ SP.imageURL }}" class="card-img-top " style="size-adjust: 10px;" alt="{{SP.name}}">
                     <div class="card-body">
                         <h5 class="card-title">{{ SP.name }}</h5>
-                        <p class="card-text"><strong>${{ SP.price|floatformat:2 }}</strong></p>
+                        <p class="card-text"><strong>₹{{ SP.price|floatformat:2 }}</strong></p>
                         <button data-product="{{SP.id}}" data-action="add" class="btn btn-outline-secondary add-btn update_cart">
                             Add to Cart
                         </button>

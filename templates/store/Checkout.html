@@ -50,7 +50,7 @@
 
         <div class="box hidden" id="payment">
             <button>
-            <a href="{% url 'checkoutview' %}">Pay Now</a>
+            <a href="{% url 'checkoutview' order.id %}">Pay Now</a> 
             </button>
         </div>
     </div>
@@ -95,7 +95,7 @@
     if(shipping == false && user != 'AnonymousUser'){
         
         document.getElementById('form-hidden').classList.add('hidden')
-        document.getElementById('makepayment'),classList.remove('hidden')
+        document.getElementById('makepayment').classList.remove('hidden')
     }
     
 

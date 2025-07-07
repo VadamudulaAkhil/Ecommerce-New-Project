@@ -157,7 +157,7 @@ RAZORPAY_KEY_ID = 'rzp_test_LYBUASWfyZDinq'
 
 RAZORPAY_KEY_SECRET = 'JBQsHJGTgwv9IBwuzroWJuvC'
 
-RAZORPAY_CALLBACK_URL = 'http://127.0.0.1:8000/payment_verify/'
+RAZORPAY_CALLBACK_URL = 'https://ecommerce-new-project.onrender.com/payment_verify/'
 
 
 

@@ -14,7 +14,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Customer
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseNotFound
 
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
@@ -71,13 +78,21 @@ def Register_Page(request):
 
         # Create the UserProfile
         Customer.objects.create(
-            user=user,
+            user = user,
+            name = f"{firstname} {middlename} {lastname}",
+            email = email,
+            mobile_number = mobile_number,
             
         )
 
+        login(request, user)
+
         User_Details = {
             'firstname':firstname,
+            'middlename':middlename,
             'lastname':lastname,
+            'username':username,
+            'email':email,
             'mobile_number':mobile_number,
         }
 
@@ -95,11 +110,16 @@ def Login_Page(request):
 
         if user is not None:
             login(request, user)
+            Customer.objects.get_or_create(user=user)
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials'})
     return render(request, 'store/Login.html')
 
+@receiver(post_save, sender=User)
+def create_customer(sender, instance, created, **kwargs):
+    if created:
+        Customer.objects.get_or_create(user=instance)
 
 
 def Items(request):
@@ -107,7 +127,7 @@ def Items(request):
     Data = cartData(request)
     cartItems = Data['cartItems']
 
-    products = Product.objects.all()
+    products = Product.objects.filter(category = 'products')
     context = {'products':products, 'cartItems':cartItems}
     return render(request,'store/Items.html',context)
 def Cart(request):
@@ -178,7 +198,8 @@ def ProcessOrder(request):
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
-        customer = request.user.customer
+        # customer = request.user.customer
+        customer, created = Customer.objects.get_or_create(user=request.user)
         order,create = Order.objects.get_or_create(customer = customer, complete = False)
 
         if order.shipping == True:
@@ -234,17 +255,89 @@ def ProcessOrder(request):
     return JsonResponse('Payment Completed', safe=False)
 
 
-def CheckoutView(request):
+def electronic(request):
+
     Data = cartData(request)
     items = Data['items']
     order = Data['order']
-    product = Product.objects.all()
+    cartItems = Data['cartItems']
+
+    products = Product.objects.filter(category='electronics')
+    context = {'products':products, 'items':items, 'order':order, 'cartItems':cartItems}
+
+    return render(request, 'store/Electronics.html', context)
+
+def mobiles(request):
+
+    Data = cartData(request)
+    items = Data['items']
+    order = Data['order']
+    cartItems = Data['cartItems']
+
+    products = Product.objects.filter(category='mobiles')
+    context = {'products':products, 'items':items, 'order':order, 'cartItems':cartItems}
+
+    return render(request, 'store/Mobiles.html', context)
+
+def HomeAppliances(request):
+
+    Data = cartData(request)
+    items = Data['items']
+    order = Data['order']
+    cartItems = Data['cartItems']
+
+    products = Product.objects.filter(category='home_appliances')
+    context = {'products':products, 'items':items, 'order':order, 'cartItems':cartItems}
+    
+    return render(request, 'store/Home_Appliances.html', context)
+
+def accessories(request):
+
+    Data = cartData(request)
+    items = Data['items']
+    order = Data['order']
+    cartItems = Data['cartItems']
+
+    products = Product.objects.filter(category = 'accessories')
+    context = {'products':products, 'items':items, 'order':order, 'cartItems':cartItems}
+
+    return render(request, 'store/Accessories.html', context)
+
+
+def CheckoutView(request, product_id):
+    print("Requested Product ID:", product_id)
+    print("Logged-in User:", request.user)
+
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return HttpResponseNotFound("Product not found.")
+
+    if product.user == request.user:
+        raise PermissionDenied("You cannot buy your own product.")
+
+    Data = cartData(request)
+    items = Data['items'] 
+    order = Data['order']
+    product = get_object_or_404(Product, id=product_id)
+
+    # if product.user == request.user:
+    #     raise PermissionDenied("You cannot buy your own product.")
+
     return render(request, 'store/payment_check.html', {'product':product, 'items':items, 'order':order})
 
 @method_decorator(csrf_exempt, name='dispatch')
-def CreatePaymentView(request, product_id):
-    product = Product.objects.get(id=product_id)
-    order = Order.objects.get()
+def CreatePaymentView(request, order_id):
+    order = Order.objects.get(id=order_id)
+
+    customer = request.user.customer
+
+    full_name = customer.name
+    email = customer.email
+    mobile = customer.mobile_number
+    
+    # If you need to fetch one of the items from the cart:
+    product = order.orderitem_set.first().product
 
     order_data = {
         'amount': int(order.get_cart_total * 100),
@@ -252,7 +345,6 @@ def CreatePaymentView(request, product_id):
         'payment_capture': '1',
     }
     razorpay_order = client.order.create(order_data)
-
 
     Payment_Order.objects.create(
         user=request.user,
@@ -264,9 +356,10 @@ def CreatePaymentView(request, product_id):
     return JsonResponse({
         'order_id': razorpay_order['id'],
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
-        'product_name': product.name,
         'amount': order_data['amount'],
-        'razorpay_callback_url' : settings.RAZORPAY_CALLBACK_URL
+        'name':full_name,
+        'email':email,
+        'mobile':mobile,
     })
 
 
@@ -295,9 +388,6 @@ def PaymentCallback(request):
     else:
         return JsonResponse({'status' : 'Failed'})
     
-# def Feedback(request):
-    
-#     return render(request, 'store/FeedBack.html')
 
 
 
@@ -314,3 +404,4 @@ def feedback_view(request):
 
 def success(request):
     return render(request, 'store/Success.html')
+
