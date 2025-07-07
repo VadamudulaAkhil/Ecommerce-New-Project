@@ -14,7 +14,7 @@ urlpatterns = [
     path('Logout/', LogoutView.as_view(next_page = 'Login'), name = 'Logout'),
     # path('checkout/', views.checkout, name='checkout'),
     # path('payment-success/', views.payment_success, name='payment_success'),
-    path('checkoutview/<int:product_id>/', views.CheckoutView, name = 'checkoutview'),
+    path('checkoutview/<int:order_id>/', views.CheckoutView, name = 'checkoutview'),
     path('create-payment/<int:order_id>/', views.CreatePaymentView, name = 'create-payment'),
     path('payment_verify', views.PaymentCallback, name='payment_verify'),
     # path('feedback/', views.Feedback, name='feedback')

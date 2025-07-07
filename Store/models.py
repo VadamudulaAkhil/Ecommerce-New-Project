@@ -21,7 +21,7 @@ class Product(models.Model):
         ('products', 'products')
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField()
     description = models.CharField(max_length=200, null=True, blank=True)

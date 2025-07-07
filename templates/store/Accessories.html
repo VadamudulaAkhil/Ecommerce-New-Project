@@ -3,16 +3,47 @@
 
 {% block content %}
 
+<style>
+    .image-container {
+        display: inline-block;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .image-container img {
+        display: block;
+        width: 300px;
+        height: auto;
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .image-container:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-container:hover img {
+        filter: brightness(1.1);
+    }
+</style>
+
+<div class="row">
+
 {% for p in products %}
     <div class="col-lg-4">
-        <a href="{{ p.imageURL }}"><img class="thumbnail" src="{{ p.imageURL }}" alt="{{ p.name }}"></a>
+        <div class="image-container">
+        <a href="{{ p.imageURL }}"><img style="height: 200px; width: 220px;" class="thumbnail" src="{{ p.imageURL }}" alt="{{ p.name }}"></a></div>
         <h4><strong>{{p.name}}</strong></h4>
+        <hr>
+        <h5><strong>{{ p.description }}</strong></h5>
         <hr>
         <button data-product="{{p.id}}" data-action="add" class="btn btn-outline-secondary add-btn update_cart">Add to Cart</button>
         <a class="btn btn-outline-success" href="{% url 'Cart' %}">View</a>
         <h5 style="float: right;"><strong>₹{{p.price|floatformat:2}}</strong></h5>
     </div>
     {% endfor %}
+    </div>
 
 
 

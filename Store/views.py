@@ -77,13 +77,12 @@ def Register_Page(request):
         )
 
         # Create the UserProfile
-        Customer.objects.create(
-            user = user,
-            name = f"{firstname} {middlename} {lastname}",
-            email = email,
-            mobile_number = mobile_number,
-            
-        )
+        customer = Customer.objects.get(user=user)
+        customer.name = f"{firstname} {middlename} {lastname}"
+        customer.email = email
+        customer.mobile_number = mobile_number
+        customer.save()
+
 
         login(request, user)
 
@@ -304,25 +303,16 @@ def accessories(request):
     return render(request, 'store/Accessories.html', context)
 
 
-def CheckoutView(request, product_id):
-    print("Requested Product ID:", product_id)
+def CheckoutView(request, order_id):
+    print("Requested Product ID:", order_id)
     print("Logged-in User:", request.user)
-
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return HttpResponseNotFound("Product not found.")
-
-    if product.user == request.user:
-        raise PermissionDenied("You cannot buy your own product.")
 
     Data = cartData(request)
     items = Data['items'] 
-    order = Data['order']
-    product = get_object_or_404(Product, id=product_id)
+    order = get_object_or_404(Order, id=order_id)
+    product = order.orderitem_set.first().product
 
-    # if product.user == request.user:
-    #     raise PermissionDenied("You cannot buy your own product.")
+
 
     return render(request, 'store/payment_check.html', {'product':product, 'items':items, 'order':order})
 
