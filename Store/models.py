@@ -117,6 +117,8 @@ class Payment_Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Order {self.user.username} - {self.product.name}"
+        user_name = self.user.username if self.user else "Unknown User"
+        product_name = self.product.name if self.product else "Unknown Product"
+        return f"Order {user_name} - {product_name}"
 
     
