@@ -77,7 +77,7 @@ def Register_Page(request):
         )
 
         # Create the UserProfile
-        customer = Customer.objects.get(user=user)
+        customer,created = Customer.objects.get_or_create(user=user)
         customer.name = f"{firstname} {middlename} {lastname}"
         customer.email = email
         customer.mobile_number = mobile_number
