@@ -27,7 +27,7 @@ SECRET_KEY = 'qq3zfmf=xpavaexqf^$z&q5-1g!_^tl!3a8^l7uec3k0i9+*#4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ecommerce-new-project.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ecommerce-new-project-1.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
