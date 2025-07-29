@@ -36,11 +36,14 @@
         <a href="{{ p.imageURL }}"><img style="height: 200px; width: 220px;" class="thumbnail" src="{{ p.imageURL }}" alt="{{ p.name }}"></a></div>
         <h4><strong>{{p.name}}</strong></h4>
         <hr>
-        <h5><strong>{{ p.description }}</strong></h5>
-        <hr>
         <button data-product="{{p.id}}" data-action="add" class="btn btn-outline-secondary add-btn update_cart">Add to Cart</button>
         <a class="btn btn-outline-success" href="{% url 'Cart' %}">View</a>
         <h5 style="float: right;"><strong>₹{{p.price|floatformat:2}}</strong></h5>
+        <hr>
+        <br>
+        <h4><strong>{{p.description}}</strong></h4>
+        <br>
+        <hr><hr>
     </div>
     {% endfor %}
     </div>
