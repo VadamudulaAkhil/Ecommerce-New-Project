@@ -50,9 +50,15 @@
         </div>
 
         <div class="box hidden" id="payment">
-            <button>
-            <a href="{% url 'checkoutview' order.id %}">Pay Now</a> 
-            </button>
+                {% if user.is_authenticated %}
+                <button class="btn btn-success">
+                    <a href="{% url 'checkoutview' order.id %}">Pay Now</a>
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-success" onclick="loginPopup()">
+                    Pay
+                </button>
+            {% endif %}
         </div>
     </div>
 
@@ -166,6 +172,9 @@
 
     }
 
+    function loginPopup(){
+    alert("Please login to buy your product 🛒");
+}
     
 
 </script>
